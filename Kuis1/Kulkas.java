@@ -27,6 +27,6 @@ public class Kulkas {
         }
     }
     public void tampilkanInfo() {
-        System.out.println("Kulkas " +merk +" | " +"Suhu : "+termostat.getSuhu() +" C");
+        System.out.println("Kulkas " +merk +" | " +"Suhu : " +termostat.getSuhu() +" C");
     }
 }
