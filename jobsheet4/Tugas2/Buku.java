@@ -1,0 +1,14 @@
+package jobsheet4.Tugas2;
+
+public class Buku {
+    private String judul;
+
+    public Buku(String judul) {
+        this.judul = judul;
+    }
+
+    public String getJudul() {
+        return judul;
+    }
+}
+
