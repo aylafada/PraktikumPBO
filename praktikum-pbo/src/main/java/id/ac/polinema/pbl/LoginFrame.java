@@ -1,158 +1,120 @@
 package id.ac.polinema.pbl;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class LoginFrame extends JFrame {
-    private final JTextField txtUsername = new JTextField();
-    private final JPasswordField txtPassword = new JPasswordField();
-    private final JComboBox<String> cmbRole =
-            new JComboBox<>(new String[]{"Pembeli", "Penjual"});
 
-    private JPanel card;
-    private int row = 0;
+    private JTextField txtUsername;
+    private JPasswordField txtPassword;
+    private JComboBox<String> cmbRole;
 
     public LoginFrame() {
+        setSize(400, 500);
         setTitle("Brawijaya Street Food");
-        setSize(520, 820);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null); // null untuk set posisi manual
 
-        JPanel background = new JPanel(new GridBagLayout());
-        background.setBackground(Theme.BG);
-        setContentPane(background);
+        // Judul
+        JLabel lblJudul = new JLabel("Selamat Datang!", SwingConstants.CENTER);
+        lblJudul.setBounds(40, 20, 300, 30);
+        add(lblJudul);
 
-        card = new RoundedPanel(24, Theme.CARD, Theme.BORDER);
-        card.setLayout(new GridBagLayout());
-        card.setBorder(new EmptyBorder(32, 32, 32, 32));
-        card.setPreferredSize(new Dimension(440, 720));
-        background.add(card);
-
-        LoginAction action = new LoginAction(this);
-
-        // Logo
-        JLabel logo = new JLabel("", SwingConstants.CENTER);
-        java.net.URL url = getClass().getResource("/images/logo.png");
-        if (url != null) {
-            Image img = new ImageIcon(url).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
-            logo.setIcon(new ImageIcon(img));
-            addRow(logo, 0);
-        }
-
-        // Judul + deskripsi
-        addRow(label("Selamat Datang!", Theme.TITLE, Theme.TEXT), 20);
-        addRow(label("<html><div style='text-align:center;width:300px'>"
-                + "Masuk ke akunmu untuk mengakses layanan Brawijaya Street Food."
-                + "</div></html>", Theme.NORMAL, Theme.MUTED), 10);
+        // Deskripsi
+        JLabel lblDeskripsi = new JLabel(
+                "<html><center>Masuk ke akunmu untuk mengakses layanan Brawijaya Street Food.</center></html>",
+                SwingConstants.CENTER);
+        lblDeskripsi.setBounds(40, 55, 300, 40);
+        add(lblDeskripsi);
 
         // Username
-        addRow(label("Username", Theme.BOLD, Theme.TEXT, SwingConstants.LEFT), 24);
-        txtUsername.setCaretColor(Theme.TEXT);
-        addRow(new InputField(txtUsername, null), 8);
+        JLabel lblUsername = new JLabel("Username");
+        lblUsername.setBounds(40, 110, 300, 25);
+        add(lblUsername);
 
-        // Password + tombol mata
-        addRow(label("Password", Theme.BOLD, Theme.TEXT, SwingConstants.LEFT), 18);
-        txtPassword.setCaretColor(Theme.TEXT);
-        JButton btnEye = new JButton("\uD83D\uDC41");
-        btnEye.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
-        btnEye.setForeground(Theme.MUTED);
-        btnEye.setContentAreaFilled(false);
-        btnEye.setBorderPainted(false);
-        btnEye.setFocusPainted(false);
-        btnEye.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        txtUsername = new JTextField();
+        txtUsername.setBounds(40, 135, 300, 25);
+        add(txtUsername);
+
+        // Password
+        JLabel lblPassword = new JLabel("Password");
+        lblPassword.setBounds(40, 170, 300, 25);
+        add(lblPassword);
+
+        txtPassword = new JPasswordField();
+        txtPassword.setBounds(40, 195, 300, 25);
+        add(txtPassword);
+
+        // Checkbox untuk menampilkan password
+        JCheckBox chkLihat = new JCheckBox("Tampilkan password");
+        chkLihat.setBounds(40, 225, 300, 20);
         char defaultEcho = txtPassword.getEchoChar();
-        btnEye.addActionListener(e -> txtPassword.setEchoChar(
-                txtPassword.getEchoChar() == 0 ? defaultEcho : (char) 0));
-        addRow(new InputField(txtPassword, btnEye), 8);
+        chkLihat.addActionListener(e -> {
+            if (chkLihat.isSelected()) {
+                txtPassword.setEchoChar((char) 0);
+            } else {
+                txtPassword.setEchoChar(defaultEcho);
+            }
+        });
+        add(chkLihat);
 
         // Masuk sebagai
-        addRow(label("Masuk sebagai", Theme.BOLD, Theme.TEXT, SwingConstants.LEFT), 18);
-        cmbRole.setBackground(Theme.FIELD);
-        addRow(new InputField(cmbRole, null), 8);
+        JLabel lblRole = new JLabel("Masuk sebagai");
+        lblRole.setBounds(40, 255, 300, 25);
+        add(lblRole);
 
-        // Tombol Masuk
-        RoundedButton btnLogin = new RoundedButton("Masuk",
-                Theme.ORANGE, Color.BLACK, null);
-        btnLogin.setActionCommand("LOGIN");
-        btnLogin.addActionListener(action);
-        addRow(btnLogin, 24);
+        cmbRole = new JComboBox<>(new String[]{"Pembeli", "Penjual"});
+        cmbRole.setBounds(40, 280, 300, 25);
+        add(cmbRole);
 
-        // Pemisah "atau"
-        JPanel divider = new JPanel(new GridBagLayout());
-        divider.setOpaque(false);
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1;
-        JSeparator s1 = new JSeparator();
-        JSeparator s2 = new JSeparator();
-        s1.setForeground(Theme.BORDER);
-        s2.setForeground(Theme.BORDER);
-        divider.add(s1, c);
-        c.weightx = 0;
-        c.insets = new Insets(0, 12, 0, 12);
-        divider.add(label("atau", Theme.NORMAL, Theme.MUTED), c);
-        c.weightx = 1;
-        c.insets = new Insets(0, 0, 0, 0);
-        divider.add(s2, c);
-        addRow(divider, 18);
+        // Tombol
+        LoginAction action = new LoginAction(this);
 
-        // Tombol Tamu
-        RoundedButton btnGuest = new RoundedButton("Jelajahi Menu sebagai Tamu",
-                Theme.CARD, Theme.TEXT, Theme.BORDER);
-        btnGuest.setActionCommand("GUEST");
-        btnGuest.addActionListener(action);
-        addRow(btnGuest, 18);
+        JButton btnMasuk = new JButton("Masuk");
+        btnMasuk.setBounds(40, 320, 300, 30);
+        btnMasuk.setActionCommand("LOGIN");
+        btnMasuk.addActionListener(action);
+        add(btnMasuk);
 
-        // Link daftar
-        JPanel register = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 0));
-        register.setOpaque(false);
-        register.add(label("Belum memiliki akun?", Theme.NORMAL, Theme.MUTED));
-        JButton btnRegister = new JButton("Daftar sekarang");
-        btnRegister.setFont(Theme.BOLD);
-        btnRegister.setForeground(Theme.ORANGE);
-        btnRegister.setContentAreaFilled(false);
-        btnRegister.setBorderPainted(false);
-        btnRegister.setFocusPainted(false);
-        btnRegister.setMargin(new Insets(0, 0, 0, 0));
-        btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnRegister.setActionCommand("REGISTER");
-        btnRegister.addActionListener(action);
-        register.add(btnRegister);
-        addRow(register, 18);
+        JLabel lblAtau = new JLabel("atau", SwingConstants.CENTER);
+        lblAtau.setBounds(40, 360, 300, 20);
+        add(lblAtau);
 
-        // Dorong semua ke atas
-        GridBagConstraints filler = new GridBagConstraints();
-        filler.gridx = 0;
-        filler.gridy = row++;
-        filler.weighty = 1;
-        card.add(Box.createVerticalGlue(), filler);
+        JButton btnTamu = new JButton("Jelajahi Menu sebagai Tamu");
+        btnTamu.setBounds(40, 385, 300, 30);
+        btnTamu.setActionCommand("GUEST");
+        btnTamu.addActionListener(action);
+        add(btnTamu);
+
+        // Daftar
+        JLabel lblDaftar = new JLabel("Belum memiliki akun?");
+        lblDaftar.setBounds(60, 425, 150, 25);
+        add(lblDaftar);
+
+        JButton btnDaftar = new JButton("Daftar sekarang");
+        btnDaftar.setBounds(200, 425, 140, 25);
+        btnDaftar.setActionCommand("REGISTER");
+        btnDaftar.addActionListener(action);
+        add(btnDaftar);
     }
 
-    // ---- helper ----
-    private void addRow(Component comp, int topGap) {
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = row++;
-        c.weightx = 1;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(topGap, 0, 0, 0);
-        card.add(comp, c);
+    // getter untuk dipakai LoginAction
+    public String getUsername() {
+        return txtUsername.getText().trim();
     }
 
-    private JLabel label(String text, Font font, Color color) {
-        return label(text, font, color, SwingConstants.CENTER);
+    public String getPassword() {
+        return new String(txtPassword.getPassword());
     }
 
-    private JLabel label(String text, Font font, Color color, int align) {
-        JLabel l = new JLabel(text, align);
-        l.setFont(font);
-        l.setForeground(color);
-        return l;
+    public String getRole() {
+        return (String) cmbRole.getSelectedItem();
     }
-
-    // ---- getter untuk dipakai LoginAction ----
-    public String getUsername() { return txtUsername.getText().trim(); }
-    public String getPassword() { return new String(txtPassword.getPassword()); }
-    public String getRole()     { return (String) cmbRole.getSelectedItem(); }
 }
